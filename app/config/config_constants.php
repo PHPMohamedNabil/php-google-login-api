@@ -18,7 +18,6 @@ define('SESSION_CONFIG',CONFIG.'session.php');
 //webiste address and routes
 define('ROUTES_WEB',APP.'routes');
 define('SITE_URL','http://localhost:8000/');
-define('SITE_AD_URL','http://bookstore.local/admin/');
 define('VENDOR',ROOT_PATH.'vendor'.DS);
 
 define('UPLOADS',ROOT_PATH.'public'.DS.'uploads'.DS);
