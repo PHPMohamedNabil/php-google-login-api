@@ -16,15 +16,15 @@ Installation
 2. install composer.
 3. goto .env to put your google client_id and secret_key.
 4. run command composer install to install pacakge.
-5. open command prompot and write php migrate (optional :if you are storing user data to database)
+5. open command prompt and write php migrate (optional :if you are storing user data to database)
 6. open public folder and run command php -S localhost:8000 (to start php local server you can choose and localhost port you want)
 
 # install composer project packages:
-    ``` composer install ```
+    composer install 
 ### run migration command for storing data to database mysql
-    ``` php migrate  ```
+     php migrate  
 ### go to public folder and start your localhost server
-    ``` php -S localhost:8000   ```
+     php -S localhost:8000   
 
 # put your google api setting 
 
@@ -70,7 +70,7 @@ define('SITE_AD_URL','http://bookstore.local/admin/');
 define('VENDOR',ROOT_PATH.'vendor'.DS);
 ```
 
-#congiration trait
+#Configration trait
  go to app\traits\GoogleConfigrationTrait.php and edit your configration your website url settings
  ### edit redirect url to be match one you wrote in google cloud api setting **!imporatant**
  ```php
