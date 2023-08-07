@@ -20,46 +20,47 @@ class GoogleController extends Controller
 
 	public function index(Request $request)
 	{    	   
-	     if($request->code)
-	      { 
-		   $token = $this->getAccessToken($request->code);
-		 
-		      if(isset($token['error']))
+		 if($request->code)
+		 { 
+		 	  $token = $this->getAccessToken($request->code);
+		 	 
+		 	  if(isset($token['error']))
 		      {
-			  return Url::redirectwith(route_name('google_login'),['error'=>'Connection faild:login faild please try to login again afer 1 minutes']);
+		     	  return Url::redirectwith(route_name('google_login'),['error'=>'Connection faild:login faild please try to login again afer 1 minutes']);
 		      }
-			 session()->set('token',$token);
-			
-			return Url::redirect(route_name('home_page'));
-	
-	       }
+       
+	       session()->regenerateId(true);
+	       session()->set('token',$token);
+	          
+	       return Url::redirect(route_name('home_page'));
 
-		  return view('google_login',['login_url'=>$this->getLoginUrl()]);    
-        }
+		 }
+
+	  return view('google_login',['login_url'=>$this->getLoginUrl()]);    
+	}
 
 	public function home(Request $request)
 	{       
-		$user_info  = $this->getUserData($this->client);   
-	
-		return view('home_page',compact('user_info'));
+	    $user_info  = $this->getUserData($this->client);   
+
+	    return view('home_page',compact('user_info'));
 
 	}
-	
-     //if you are saving user profile data to db
+ //if you are saving user profile data to db
 	public function profile(Request $request)
 	{       
-		$user_info  = $this->saveOrGetUserData($this->client);   
-	
-		return view('home_profile',compact('user_info'));
+	    $user_info  = $this->saveOrGetUserData($this->client);   
+
+	    return view('home_profile',compact('user_info'));
 
 	}
 
 	public function logout()
 	{
 		$this->revokeUserToken();
-	
+
 		session()->invalidate();
-	
+
 		return Url::redirect(route_name('google_login'));
 
 	}
