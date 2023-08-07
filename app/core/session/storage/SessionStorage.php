@@ -182,9 +182,17 @@ class SessionStorage extends SessionHandler implements SessionStorageInterface,S
 	  }
 
 
-    public function regenerate()
+      public function regenerate(bool $destroy=false)
 	  {
-	  	return session_regenerate_id(true);
+	  	 if($destroy)
+	  	 {
+	  	 	 return session_regenerate_id(true);
+	  	 	 //$this->invalidateSession();
+	  	 }
+	  	 else
+	  	 {
+	  	 	 return session_regenerate_id();
+	  	 }
 	  }
 
 
