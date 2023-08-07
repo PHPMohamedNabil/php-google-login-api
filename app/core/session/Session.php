@@ -28,11 +28,14 @@ class Session implements SessionInterface
      	   }
 
      	   $this->storage      = $storage;
+            
+            $id = $this->storage->getSessionid();
 
              $this->stamp();
              $this->setStartTime();
-             $this->last_access();
              $this->checkLifeTime();
+             $this->last_access();
+            
      
      }
 
@@ -106,8 +109,9 @@ class Session implements SessionInterface
            $life_time =$this->get('start_time');
             
              if( (time()-$life_time) >= 60 * intval($this->storage->getLifeTime()) )
-             {
-                return $this->invalidate();     
+             {     
+                   $this->regenerateId(true);
+                   return $this->setStartTime();
              }
 
              return true;
@@ -122,11 +126,14 @@ class Session implements SessionInterface
               $last =$this->get('last_access');
 
               if(( (time()-$last) >= 60 * intval($this->storage->idleTime()) ) )
-              {
-                 return $this->storage->regenerate();
+              {   
+                    $this->reborn();
+                 return $this->set('last_access',time()+$this->storage->idleTime()); 
               }
-
-              return true;
+              else
+              {
+                 return $this->set('last_access',time()+$this->storage->idleTime());
+              }
               
           }
           else
@@ -140,7 +147,7 @@ class Session implements SessionInterface
        public function stamp()
        { 
           $agent   = get_known_broswer(false,true);
-          $pattern = $agent.$this->agent_patt.$this->storage->getSessionId();
+          $pattern = $agent.$this->agent_patt;
           
           if( !$this->has('stamp') )
           {
@@ -154,11 +161,24 @@ class Session implements SessionInterface
           }
           else
           {
-                    
-              $this->invalidate();
+               
+                 $this->reborn();
           }
           
        }
+
+     public function reborn()
+     {
+        $this->invalidate();
+        $this->storage->startSession();
+        $this->regenerateId(true);
+
+     }
+
+     public function regenerateId(bool $destroy=false)
+     {
+        return $this->storage->regenerate($destroy);
+     }
 
      public function has($key)
      {
